@@ -345,7 +345,7 @@ class PhotoFragment : ViewPagerFragment() {
         }
     }
 
-    private fun loadImage() {
+    private fun loadImage(loadGif: Boolean = false) {
         checkScreenDimensions()
 
         if (mMedium.isPortrait() && context != null) {
@@ -356,7 +356,7 @@ class PhotoFragment : ViewPagerFragment() {
             mImageOrientation = getImageOrientation()
             activity?.runOnUiThread {
                 when {
-                    mMedium.isGIF() -> loadGif()
+                    mMedium.isGIF() -> if (loadGif) loadGif()
                     mMedium.isSVG() -> loadSVG()
                     mMedium.isApng() -> loadAPNG()
                     else -> loadBitmap()
@@ -495,7 +495,7 @@ class PhotoFragment : ViewPagerFragment() {
                 override fun onError(e: Exception?) {
                     if (mMedium.path != mOriginalPath) {
                         mMedium.path = mOriginalPath
-                        loadImage()
+                        loadImage(loadGif = true)
                         checkIfPanorama()
                     }
                 }
